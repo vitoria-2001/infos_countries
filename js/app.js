@@ -1,13 +1,15 @@
 window.addEventListener('load', init)
 
 async function init() {
-    fetchingData();
+    await fetchingData(); 
+    await renderCountries(countryDatas);
 }
+
+let countryDatas =[];
 
 async function fetchingData() {
     let resource = await fetch ("https://restcountries.eu/rest/v2/all");
     let result = await resource.json();
-    console.log (result);
 
     const AllCountry = result.map(country => {
         
@@ -21,14 +23,25 @@ async function fetchingData() {
             currSymbol: country.currencies[0].symbol,
             flag: country.flag
         }
-
+        
     });
-   
-    console.log (AllCountry);
-    return AllCountry
+    
+   return countryDatas= [...AllCountry];       
 }
 
+async function renderCountries (countryDatas) {
+    const ul = document.getElementById("countryList")
 
+    await countryDatas.forEach(country => {
+        const lis =  document.createElement("li")
+        const content = `( ${country.name})`
+        lis.innerText=content
 
+        ul.appendChild(lis)
+    })   
+    return ul;
+}
+
+  
 
 
